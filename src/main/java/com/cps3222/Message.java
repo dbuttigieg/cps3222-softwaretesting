@@ -9,8 +9,7 @@ public class Message {
     public long timestamp;
     public String content;
 
-    public Message(){
-
+    public Message() {
     }
 
     public Message(String sourceAgentId, String targetAgentId, String content, long timestamp){
@@ -20,3 +19,5 @@ public class Message {
         this.timestamp = timestamp;
     }
 }
+//this class was not tested using its own seperate testing class since it is only used to store messages and thus
+//its functionality is tested in other classes.

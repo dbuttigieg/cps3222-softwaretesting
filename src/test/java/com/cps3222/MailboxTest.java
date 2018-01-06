@@ -18,9 +18,19 @@ public class MailboxTest {
 
     @Before
     public void setUp() throws Exception {
+        m = new Mailbox("007");
+        Message m1 = new Message("007", "008", "Message1", 10000);
+        Message m2 = new Message("007", "008", "Message2", 20000);
+        Message m3 = new Message("007", "008", "Message3", 30000);
 
-        m = new Mailbox();
-        mockMailbox.add(new Message());
+        mockMailbox.add(m1);
+        mockMailbox.add(m2);
+        mockMailbox.add(m3);
+    }
+
+    @Test
+    public void testConsumeNextMessage() throws Exception {
+        assertEquals(mockMailbox.peek(), m.consumeNextMessage(mockMailbox));
     }
 
     @Test
@@ -28,20 +38,18 @@ public class MailboxTest {
 
         //making the queue empty
         mockMailbox.remove();
+        mockMailbox.remove();
+        mockMailbox.remove();
 
         assertEquals(null, m.consumeNextMessage(mockMailbox));
-    }
-
-    @Test
-    public void testConsumeMessage() throws Exception {
-
-        assertEquals(mockMailbox.peek(), m.consumeNextMessage(mockMailbox));
     }
 
     @Test
     public void testHasMessages_emptyMailbox() throws Exception {
 
         //making the queue empty
+        mockMailbox.remove();
+        mockMailbox.remove();
         mockMailbox.remove();
 
         assertEquals(false, m.hasMessages(mockMailbox));
