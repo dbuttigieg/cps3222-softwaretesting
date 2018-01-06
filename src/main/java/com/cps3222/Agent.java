@@ -12,11 +12,13 @@ public class Agent {
 
     public boolean login() {
         //true if successful false otherwise
+        //Initiates contact with a supervisor to get a login key and subsequently logs into the system.
         return true;
     }
 
     public boolean sendMessage(String destinationAgentId, String message) {
         //true if successful false otherwise
+        //Sends a message to the destination agent.
         return true;
     }
 }
