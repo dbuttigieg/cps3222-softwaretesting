@@ -1,22 +1,31 @@
 package com.cps3222;
 
+import java.util.ArrayList;
+
 /**
  * Created by denise on 02/01/2018.
  */
 //holds all messages for a user
 public class Mailbox {
-    String ownerID;
+    public String ownerID;
+    int indexOfCurrentMessage;
 
     public Mailbox(){
     }
 
-    public Message consumeNextMessage() {
-        //Returns the next message in the box on a FIFO basis.
-        return null;
+    public Mailbox(String ownerID) {
+        this.ownerID = ownerID;
     }
 
-    public boolean hasMessages() {
+    public Message consumeNextMessage(ArrayList<Message> incomingMessages) {
+        if (incomingMessages.get(indexOfCurrentMessage++) == null) return null;
+        else return incomingMessages.get(indexOfCurrentMessage);
+        //Returns the next message in the box on a FIFO basis.
+    }
+
+    public boolean hasMessages(ArrayList<Message> mailbox) {
         //Checks if there are any messages in the mailbox.
-        return false;
+        if (mailbox.isEmpty()) return false;
+        else return true;
     }
 }

@@ -27,8 +27,6 @@ public class AgentTest {
 
         sender_agent = new Agent("007", "Roll");
         receiver_agent = new Agent("008", "Denise");
-        StubGenerateLoginKey stubGenerateLoginKey = new StubGenerateLoginKey();
-        sender_agent.loginKey = stubGenerateLoginKey.getLoginKey("007");
     }
 
     @Test
@@ -36,6 +34,10 @@ public class AgentTest {
         StubLoginSuccess sls = new StubLoginSuccess();
         boolean loginSuccess = sls.login();
         assertEquals(true, loginSuccess);
+
+        StubGenerateLoginKey stubGenerateLoginKey = new StubGenerateLoginKey();
+        sender_agent.loginKey = stubGenerateLoginKey.getLoginKey("007");
+        assertEquals(sender_agent.loginKey, "ABCDE12345");
     }
 
     @Test
@@ -57,7 +59,7 @@ public class AgentTest {
     @Test
     public void testsendMessage_existingAgent_messageTooLong() throws Exception {
         String message = "This is a dummy message. Testing for messages longer than 140 characters. Here goes the alphabet: a b c d e f g h i j k l m n o p q r s t u v w x y z, and the numbers 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42";
-        assertEquals(false, sender_agent.sendMessage("ABCDE12345", message));
+        assertEquals(false, sender_agent.sendMessage("008", message));
     }
 
     @Test
