@@ -6,8 +6,14 @@ package com.cps3222;
 public class Agent {
     public String id;
     public String name;
+    public String loginKey;
 
     public Agent() {
+    }
+
+    public Agent(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public boolean login() {
@@ -20,9 +26,8 @@ public class Agent {
         //true if successful false otherwise
         //Sends a message to the destination agent.
         //true if successful false otherwise
-        if (message.length() < 140 && destinationAgentId != null) {
+        if (message.length() < 140 && destinationAgentId != null)
             return true;
-        }
-        return false;
+        else return false;
     }
 }
