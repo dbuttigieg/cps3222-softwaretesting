@@ -19,6 +19,10 @@ public class Agent {
     public boolean sendMessage(String destinationAgentId, String message) {
         //true if successful false otherwise
         //Sends a message to the destination agent.
-        return true;
+        //true if successful false otherwise
+        if (message.length() < 140 && destinationAgentId != null) {
+            return true;
+        }
+        return false;
     }
 }
