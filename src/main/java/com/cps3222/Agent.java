@@ -1,7 +1,7 @@
 package com.cps3222;
 
 /**
- * Created by denise on 02/01/2018.
+ * Created by denise and raoul on 02/01/2018.
  */
 public class Agent {
     public String id;
