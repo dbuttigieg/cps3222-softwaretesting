@@ -1,6 +1,6 @@
 package com.cps3222;
 
-import java.util.ArrayList;
+import java.util.Queue;
 
 /**
  * Created by denise on 02/01/2018.
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 //holds all messages for a user
 public class Mailbox {
     public String ownerID;
-    int indexOfCurrentMessage;
+    //Queue<Message> mailboxQueue = new LinkedList<Message>();
 
     public Mailbox(){
     }
@@ -17,15 +17,19 @@ public class Mailbox {
         this.ownerID = ownerID;
     }
 
-    public Message consumeNextMessage(ArrayList<Message> incomingMessages) {
-        if (incomingMessages.get(indexOfCurrentMessage++) == null) return null;
-        else return incomingMessages.get(indexOfCurrentMessage);
+    public Message consumeNextMessage(Queue<Message> q) {
         //Returns the next message in the box on a FIFO basis.
+        Message messageToConsume;
+        if (q.isEmpty()) return null;
+        else {
+            messageToConsume = q.peek();
+            q.remove();
+            return messageToConsume;
+        }
     }
 
-    public boolean hasMessages(ArrayList<Message> mailbox) {
+    public boolean hasMessages(Queue<Message> q) {
         //Checks if there are any messages in the mailbox.
-        if (mailbox.isEmpty()) return false;
-        else return true;
+        return !q.isEmpty();
     }
 }
