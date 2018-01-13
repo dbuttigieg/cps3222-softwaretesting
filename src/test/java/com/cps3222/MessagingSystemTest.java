@@ -3,7 +3,6 @@ package com.cps3222;
 import com.cps3222.stubs.StubGenerateLoginKey;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static junit.framework.TestCase.assertFalse;
@@ -17,9 +16,10 @@ import static org.mockito.Mockito.when;
 public class MessagingSystemTest {
     private Agent agent;
     private MessagingSystem ms;
-
-    @Mock
-    Supervisor supervisor;
+    private StubGenerateLoginKey generateLoginKey;
+    private Supervisor supervisor;
+//    @Mock
+//    Supervisor supervisor;
 
     @Before
     public void setUp() throws Exception {
@@ -27,18 +27,16 @@ public class MessagingSystemTest {
 
         ms = new MessagingSystem();
         agent = new Agent("007", "Roll");
-
-        StubGenerateLoginKey generateLoginKey = new StubGenerateLoginKey();
-
-        ms.requestLogin(agent);
-        when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
+        generateLoginKey = new StubGenerateLoginKey();
 
         MockitoAnnotations.initMocks(this);
-
     }
 
     @Test
     public void login_within1minute() throws Exception {
+        when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
+        ms.requestLogin(agent, supervisor);
+
         ms.login(agent, "ABCDE12345");
         assertTrue(agent.loginTime-System.currentTimeMillis() < 60000);
     }

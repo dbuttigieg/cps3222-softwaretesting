@@ -11,23 +11,23 @@ public class MessagingSystem {
     public ArrayList<Agent> agentList = new ArrayList<Agent>();
     private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
     public String sessionKey = "";
-    Supervisor supervisor;
+//    Supervisor supervisor;
+    private boolean requestLoginSuccess = false;
+
     public MessagingSystem() {
     }
 
-    public boolean requestLogin(Agent agent) {
-        boolean loginSuccessful = false;
+    public void requestLogin(Agent agent, Supervisor supervisor) {
         if(agent.login()) {
             String supervisorLoginKey = supervisor.getLoginKey();
 
             if (registerLoginKey(supervisorLoginKey)) {
                 agent.loginKey = supervisorLoginKey;
-                loginSuccessful = true;
+                requestLoginSuccess = true;
             } else {
-               loginSuccessful = false;
+               requestLoginSuccess = false;
             }
         }
-        return loginSuccessful;
     }
 
     public String login(Agent agent, String key) {
@@ -39,7 +39,7 @@ public class MessagingSystem {
          * 4. LoginKey is valid for 1 minute.
          */
         //Supervisor to assign login
-        if (requestLogin(agent)) {
+        if (requestLoginSuccess) {
             //if allowed, Agent can log in
             //allow 1 minute for login
             if (System.currentTimeMillis() - agent.loginTime <= 60000) {
