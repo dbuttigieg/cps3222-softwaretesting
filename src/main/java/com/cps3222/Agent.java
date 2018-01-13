@@ -8,6 +8,7 @@ public class Agent {
     public String name;
     public String loginKey;
     public long loginTime;
+    public Mailbox mailbox = new Mailbox();
 //    public String sessionKey;
 
     public Agent() {
@@ -24,13 +25,13 @@ public class Agent {
         return true;
     }
 
-    public boolean sendMessage(String destinationAgentId, String message) {
-        //true if successful false otherwise
-        //Sends a message to the destination agent.
-        //true if successful false otherwise
-        if (message.length() < 140 && destinationAgentId != null) {
-            return true;
-        }
-        else return false;
+    public boolean sendMessage(Message m) {
+        m.targetAgent.mailbox.addMessage(m);
+        return true;
+    }
+
+    public String logout(){
+        //some logout code
+        return "Message sent successfully. Mailbox full. Logging out";
     }
 }

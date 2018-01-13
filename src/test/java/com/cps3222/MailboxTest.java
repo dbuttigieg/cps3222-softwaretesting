@@ -19,9 +19,9 @@ public class MailboxTest {
     @Before
     public void setUp() throws Exception {
         m = new Mailbox("007");
-        Message m1 = new Message("007", "008", "Message1", 10000);
-        Message m2 = new Message("007", "008", "Message2", 20000);
-        Message m3 = new Message("007", "008", "Message3", 30000);
+        Message m1 = new Message(new Agent("007", "Denise"), new Agent("008", "Dennis"), "Message1", 10000);
+        Message m2 = new Message(new Agent("007", "Denise"), new Agent("008", "Dennis"), "Message2", 20000);
+        Message m3 = new Message(new Agent("007", "Denise"), new Agent("008", "Dennis"), "Message3", 30000);
 
         mockMailbox.add(m1);
         mockMailbox.add(m2);

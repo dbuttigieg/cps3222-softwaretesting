@@ -11,8 +11,8 @@ public class MessagingSystem {
     public ArrayList<Agent> agentList = new ArrayList<Agent>();
     private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
     public String sessionKey = "";
-//    Supervisor supervisor;
-    private boolean requestLoginSuccess = false;
+    public long sessionStart;
+    boolean requestLoginSuccess = false;
 
     public MessagingSystem() {
     }
@@ -21,9 +21,10 @@ public class MessagingSystem {
         if(agent.login()) {
             String supervisorLoginKey = supervisor.getLoginKey();
 
-            if (registerLoginKey(supervisorLoginKey)) {
+            if (registerLoginKey(agent.id, supervisorLoginKey)) {
                 agent.loginKey = supervisorLoginKey;
                 agent.loginTime = System.currentTimeMillis();
+                agentList.add(agent);
                 requestLoginSuccess = true;
 
             } else {
@@ -44,13 +45,14 @@ public class MessagingSystem {
         if (requestLoginSuccess) {
             //if allowed, Agent can log in
             //allow 1 minute for login
-            if (System.currentTimeMillis() - agent.loginTime <= 60000) {
+            if (agent.loginTime - System.currentTimeMillis() <= 60000) {
                 if (agent.loginKey.equals(key)) {
                     //if successfully logged in assign session key
 //                        agent.sessionKey = RandomStringUtils.randomAlphanumeric(50);
                     agent.loginTime = System.currentTimeMillis();
                     sessionKey = generateSessionKey();
                     message = "Login Successful";
+                    agentList.remove(agent);
                 } else {
                     message = "Invalid Login Key";
                 }
@@ -64,7 +66,7 @@ public class MessagingSystem {
     // Takes a login key and agentId such that when an agent with that
     // ID tries to login she will only be allowed access if the key also matches.
 
-    public boolean registerLoginKey(String loginKeyAssigned){
+    public boolean registerLoginKey(String agentId, String loginKeyAssigned){
         if (!checkLoginKeyLength(loginKeyAssigned)) {
             System.out.print("Invalid Key Length");
             return false;
@@ -79,6 +81,7 @@ public class MessagingSystem {
     }
 
     public String generateSessionKey() {
+        sessionStart = System.currentTimeMillis();
         return RandomStringUtils.randomAlphanumeric(50);
     }
 
@@ -87,8 +90,23 @@ public class MessagingSystem {
         if (sessionKey == this.sessionKey) {
             if(agentList.contains(targetAgent)) {
                 if (!checkBlockedWords(message)) {
-                    if (sourceAgent.sendMessage(targetAgent.id, message)) {
-                        returnMessage = "Message successfully sent";
+                    if (message.length() < 140) {
+                        //sending message through sendMessage method in Agent
+                        Message m = new Message(sourceAgent, targetAgent, message, System.currentTimeMillis());
+                        sourceAgent.sendMessage(m);
+
+                        //incrementing messagecount for both source and target agent
+                        sourceAgent.mailbox.messageCount++;
+                        targetAgent.mailbox.messageCount++;
+
+                        //checks if mailbox limit has been reached and logs agents out accordingly.
+                        if(checkAgentMailbox(sourceAgent) == 25)
+                            returnMessage = sourceAgent.logout();
+
+                        if(checkAgentMailbox(targetAgent) == 25)
+                            returnMessage = targetAgent.logout();
+                        else
+                            returnMessage = "Message sent successfully";
                     } else {
                         returnMessage = "Message length exceeded";
                     }
@@ -103,6 +121,10 @@ public class MessagingSystem {
         }
 
         return returnMessage;
+    }
+
+    private int checkAgentMailbox(Agent agent){
+        return agent.mailbox.messageCount;
     }
 
     private boolean checkLoginKeyLength(String loginKey) {

@@ -1,5 +1,6 @@
 package com.cps3222;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -8,13 +9,18 @@ import java.util.Queue;
 //holds all messages for a user
 public class Mailbox {
     public String ownerID;
-    //Queue<Message> mailboxQueue = new LinkedList<Message>();
+    public int messageCount = 0;
+    Queue<Message> mailboxQueue = new LinkedList<Message>();
 
     public Mailbox(){
     }
 
     public Mailbox(String ownerID) {
-        this.ownerID = ownerID;
+       this.ownerID = ownerID;
+    }
+
+    public void addMessage(Message m){
+        mailboxQueue.add(m);
     }
 
     public Message consumeNextMessage(Queue<Message> q) {
