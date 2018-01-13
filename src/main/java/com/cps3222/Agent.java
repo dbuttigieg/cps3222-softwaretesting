@@ -1,5 +1,11 @@
 package com.cps3222;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by denise and raoul on 02/01/2018.
  */
@@ -7,6 +13,8 @@ public class Agent {
     public String id;
     public String name;
     public String loginKey;
+
+    String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
 
     public Agent() {
     }
@@ -26,8 +34,13 @@ public class Agent {
         //true if successful false otherwise
         //Sends a message to the destination agent.
         //true if successful false otherwise
-        if (message.length() < 140 && destinationAgentId != null)
+        if (message.length() < 140 && destinationAgentId != null) {
+            for (int i = 0; i < blockedWords.length; i++) {
+                if (message.toLowerCase().indexOf(blockedWords[i].toLowerCase()) != -1)
+                    return false;
+            }
             return true;
+        }
         else return false;
     }
 }
