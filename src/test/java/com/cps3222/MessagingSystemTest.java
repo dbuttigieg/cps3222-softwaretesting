@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
 
-import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -30,22 +30,26 @@ public class MessagingSystemTest {
         generateLoginKey = new StubGenerateLoginKey();
 
         MockitoAnnotations.initMocks(this);
+
+        when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
+        ms.requestLogin(agent, supervisor);
     }
 
     @Test
     public void login_within1minute() throws Exception {
-        when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
-        ms.requestLogin(agent, supervisor);
-
-        ms.login(agent, "ABCDE12345");
+        String message = ms.login(agent, "ABCDE12345");
         assertTrue(agent.loginTime-System.currentTimeMillis() < 60000);
+        assertEquals("Login Successful", message);
     }
 
     @Test
     public void login_after1minute() throws Exception {
-        ms.login(agent, "ABCDE12345");
-        agent.loginTime += 70000;
-        assertFalse(agent.loginTime-System.currentTimeMillis() < 60000);
+//        agent.loginTime += 70000;
+
+        String message = ms.login(agent, "ABCDE12345");
+
+        assertTrue((agent.loginTime+70000)-System.currentTimeMillis() > 60000);
+        assertEquals("Login Timeout", message);
     }
 
     @Test

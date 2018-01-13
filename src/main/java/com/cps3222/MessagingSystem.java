@@ -23,7 +23,9 @@ public class MessagingSystem {
 
             if (registerLoginKey(supervisorLoginKey)) {
                 agent.loginKey = supervisorLoginKey;
+                agent.loginTime = System.currentTimeMillis();
                 requestLoginSuccess = true;
+
             } else {
                requestLoginSuccess = false;
             }
