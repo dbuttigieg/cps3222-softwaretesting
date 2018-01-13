@@ -8,12 +8,26 @@ import java.util.ArrayList;
  * Created by denise on 02/01/2018.
  */
 public class MessagingSystem {
-    //pair will save <AgentId, LoginKey>
     ArrayList<Agent> agentList = new ArrayList<Agent>();
     String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
     String sessionKey = "";
 
     public MessagingSystem() {
+    }
+
+    public boolean requestLogin(Agent agent) {
+        boolean loginSuccessful = false;
+        if(agent.login()) {
+            String supervisorLoginKey = "";
+
+            if (registerLoginKey(supervisorLoginKey)) {
+                agent.loginKey = supervisorLoginKey;
+                loginSuccessful = true;
+            } else {
+               loginSuccessful = false;
+            }
+        }
+        return loginSuccessful;
     }
 
     public String login(Agent agent, String key) {
@@ -25,28 +39,21 @@ public class MessagingSystem {
          * 4. LoginKey is valid for 1 minute.
          */
         //Supervisor to assign login
-        if (agent.login()) {
-            String supervisorLoginKey = "";
-
-            if(registerLoginKey(supervisorLoginKey)) {
-                agent.loginKey = supervisorLoginKey;
-
-                //if allowed, Agent can log in
-                //allow 1 minute for login
-                if(System.currentTimeMillis() - agent.loginTime <= 60000) {
-                    if (agent.loginKey.equals(key)) {
-                        //if successfully logged in assign session key
+        if (requestLogin(agent)) {
+            //if allowed, Agent can log in
+            //allow 1 minute for login
+            if (System.currentTimeMillis() - agent.loginTime <= 60000) {
+                if (agent.loginKey.equals(key)) {
+                    //if successfully logged in assign session key
 //                        agent.sessionKey = RandomStringUtils.randomAlphanumeric(50);
-                        agent.loginTime = System.currentTimeMillis();
-                        sessionKey = generateSessionKey();
-                        message = "Login Successful";
-                    }
-                    else {
-                        message = "Invalid Login Key";
-                    }
+                    agent.loginTime = System.currentTimeMillis();
+                    sessionKey = generateSessionKey();
+                    message = "Login Successful";
                 } else {
-                    message = "Login Timeout";
+                    message = "Invalid Login Key";
                 }
+            } else {
+                message = "Login Timeout";
             }
         }
         return message;
