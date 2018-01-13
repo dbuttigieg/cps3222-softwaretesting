@@ -4,9 +4,12 @@ import com.cps3222.stubs.StubGenerateLoginKey;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by denise on 02/01/2018.
@@ -16,17 +19,22 @@ public class MessagingSystemTest {
     private MessagingSystem ms;
 
     @Mock
-    private String supervisorLoginKey;
+    Supervisor supervisor;
 
     @Before
     public void setUp() throws Exception {
+        supervisor = mock(Supervisor.class);
+
         ms = new MessagingSystem();
         agent = new Agent("007", "Roll");
 
         StubGenerateLoginKey generateLoginKey = new StubGenerateLoginKey();
-        supervisorLoginKey = generateLoginKey.getLoginKey();
 
         ms.requestLogin(agent);
+        when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
+
+        MockitoAnnotations.initMocks(this);
+
     }
 
     @Test

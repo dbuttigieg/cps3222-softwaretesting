@@ -11,15 +11,14 @@ public class MessagingSystem {
     public ArrayList<Agent> agentList = new ArrayList<Agent>();
     private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
     public String sessionKey = "";
-    private String supervisorLoginKey = "";
-
+    Supervisor supervisor;
     public MessagingSystem() {
     }
 
     public boolean requestLogin(Agent agent) {
         boolean loginSuccessful = false;
         if(agent.login()) {
-//            String supervisorLoginKey = "";
+            String supervisorLoginKey = supervisor.getLoginKey();
 
             if (registerLoginKey(supervisorLoginKey)) {
                 agent.loginKey = supervisorLoginKey;
