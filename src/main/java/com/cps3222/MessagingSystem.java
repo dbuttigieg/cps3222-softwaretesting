@@ -8,9 +8,10 @@ import java.util.ArrayList;
  * Created by denise on 02/01/2018.
  */
 public class MessagingSystem {
-    ArrayList<Agent> agentList = new ArrayList<Agent>();
-    String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
-    String sessionKey = "";
+    public ArrayList<Agent> agentList = new ArrayList<Agent>();
+    private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
+    public String sessionKey = "";
+    private String supervisorLoginKey = "";
 
     public MessagingSystem() {
     }
@@ -18,7 +19,7 @@ public class MessagingSystem {
     public boolean requestLogin(Agent agent) {
         boolean loginSuccessful = false;
         if(agent.login()) {
-            String supervisorLoginKey = "";
+//            String supervisorLoginKey = "";
 
             if (registerLoginKey(supervisorLoginKey)) {
                 agent.loginKey = supervisorLoginKey;

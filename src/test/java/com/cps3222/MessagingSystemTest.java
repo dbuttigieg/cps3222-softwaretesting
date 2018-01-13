@@ -16,7 +16,7 @@ public class MessagingSystemTest {
     private MessagingSystem ms;
 
     @Mock
-    private Supervisor supervisor;
+    private String supervisorLoginKey;
 
     @Before
     public void setUp() throws Exception {
@@ -24,7 +24,9 @@ public class MessagingSystemTest {
         agent = new Agent("007", "Roll");
 
         StubGenerateLoginKey generateLoginKey = new StubGenerateLoginKey();
-        generateLoginKey.getLoginKey(agent);
+        supervisorLoginKey = generateLoginKey.getLoginKey();
+
+        ms.requestLogin(agent);
     }
 
     @Test

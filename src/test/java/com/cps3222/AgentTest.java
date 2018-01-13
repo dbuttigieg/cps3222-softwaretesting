@@ -15,16 +15,8 @@ import static org.junit.Assert.assertEquals;
 public class AgentTest {
     private Agent sender_agent, receiver_agent;
 
-
-    //@Mock
-    //private Agent sender_agent = new Agent("007", "Roll");
-    //private Agent receiver_agent = new Agent("008", "Denise");
-
     @Before
     public void setUp() throws Exception {
-        // sender_agent = mock(Agent.class);
-        // receiver_agent = mock(Agent.class);
-
         sender_agent = new Agent("007", "Roll");
         receiver_agent = new Agent("008", "Denise");
     }
@@ -36,7 +28,7 @@ public class AgentTest {
         assertEquals(true, loginSuccess);
 
         StubGenerateLoginKey stubGenerateLoginKey = new StubGenerateLoginKey();
-        stubGenerateLoginKey.getLoginKey(sender_agent);
+        sender_agent.loginKey = stubGenerateLoginKey.getLoginKey();
         assertEquals(sender_agent.loginKey, "ABCDE12345");
     }
 

@@ -10,8 +10,8 @@ import com.cps3222.Supervisor;
 //login key string is a dummy value since as of right now, we do not know what format the login key should be in
 public class StubGenerateLoginKey implements Supervisor {
 
-    public void getLoginKey(Agent agent) {
-        agent.loginKey = "ABCDE12345";
-        agent.loginTime = System.currentTimeMillis();
+    public String getLoginKey() {
+        return "ABCDE12345";
+//        agent.loginTime = System.currentTimeMillis();
     }
 }
