@@ -1,11 +1,5 @@
 package com.cps3222;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by denise and raoul on 02/01/2018.
  */
@@ -13,6 +7,8 @@ public class Agent {
     public String id;
     public String name;
     public String loginKey;
+    public long loginTime;
+//    public String sessionKey;
 
     public Agent() {
     }

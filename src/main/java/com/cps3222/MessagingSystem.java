@@ -1,65 +1,99 @@
 package com.cps3222;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by denise on 02/01/2018.
  */
 public class MessagingSystem {
     //pair will save <AgentId, LoginKey>
-    ArrayList<ArrayList<String>> loginInfo = new ArrayList<ArrayList<String>>();
+    ArrayList<Agent> agentList = new ArrayList<Agent>();
     String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
     String sessionKey = "";
 
     public MessagingSystem() {
     }
 
-    public String login(String agentId, String loginKey) {
-        if(registerLoginKey(agentId, loginKey)) {
+    public String login(Agent agent, String key) {
+        String message = "";
+        /**
+         * 1. Agent requests login
+         * 2. Contact Supervisor
+         * 3. Supervisor assigns LoginKey
+         * 4. LoginKey is valid for 1 minute.
+         */
+        //Supervisor to assign login
+        if (agent.login()) {
+            String supervisorLoginKey = "";
 
-            for (ArrayList<String> pair: loginInfo) {
-                if (!((pair.get(0) == agentId) && (pair.get(1) == loginKey))){
-                    return "ID and key do not match";
+            if(registerLoginKey(supervisorLoginKey)) {
+                agent.loginKey = supervisorLoginKey;
+
+                //if allowed, Agent can log in
+                //allow 1 minute for login
+                if(System.currentTimeMillis() - agent.loginTime <= 60000) {
+                    if (agent.loginKey.equals(key)) {
+                        //if successfully logged in assign session key
+//                        agent.sessionKey = RandomStringUtils.randomAlphanumeric(50);
+                        agent.loginTime = System.currentTimeMillis();
+                        sessionKey = generateSessionKey();
+                        message = "Login Successful";
+                    }
+                    else {
+                        message = "Invalid Login Key";
+                    }
+                } else {
+                    message = "Login Timeout";
                 }
             }
-
         }
-            sessionKey = RandomStringUtils.randomAlphanumeric(50);
-        return sessionKey;
+        return message;
     }
 
-    public boolean registerLoginKey(String loginKey, String agentId){
-        if (!checkLoginKeyLength(loginKey)) {
+    // Takes a login key and agentId such that when an agent with that
+    // ID tries to login she will only be allowed access if the key also matches.
+
+    public boolean registerLoginKey(String loginKeyAssigned){
+        if (!checkLoginKeyLength(loginKeyAssigned)) {
             System.out.print("Invalid Key Length");
             return false;
         }
-        if (checkUniqueKey(loginKey)) {
+
+        if (checkUniqueKey(loginKeyAssigned)) {
             System.out.print("Key not unique");
             return false;
         }
 
-        ArrayList<String> loginPair = new ArrayList<String>(Arrays.asList(agentId, loginKey));
-        loginInfo.add(loginPair);
-
-        /*
-        for (Pair<String, String> pair: loginInfo) {
-            if (!(pair.getLeft() == agentId && pair.getRight() == loginKey)) {
-                System.out.print("Login and ID do not match");
-                return false;
-            }
-        }*/
-        // Takes a login key and agentId such that when an agent with that
-        // ID tries to login she will only be allowed access if the key also matches.
         return true;
     }
 
-    public String sendMessage(String sessionKey, String sourceAgentId, String targetAgentId, String message) {
-        return null;
+    public String generateSessionKey() {
+        return RandomStringUtils.randomAlphanumeric(50);
+    }
+
+    public String sendMessage(String sessionKey, Agent sourceAgent, Agent targetAgent, String message) {
+        String returnMessage = "";
+        if (sessionKey == this.sessionKey) {
+            if(agentList.contains(targetAgent)) {
+                if (!checkBlockedWords(message)) {
+                    if (sourceAgent.sendMessage(targetAgent.id, message)) {
+                        returnMessage = "Message successfully sent";
+                    } else {
+                        returnMessage = "Message length exceeded";
+                    }
+                } else {
+                    returnMessage = "Invalid message content";
+                }
+            } else {
+                returnMessage = "Target Agent not found";
+            }
+        } else {
+            returnMessage = "Expired Session";
+        }
+
+        return returnMessage;
     }
 
     private boolean checkLoginKeyLength(String loginKey) {
@@ -68,9 +102,18 @@ public class MessagingSystem {
 
     private boolean checkUniqueKey(String loginKey){
         boolean found = false;
-        for (ArrayList<String> pair: loginInfo) {
-            if (pair.get(1) == loginKey) found = true;
+        for (Agent agent: agentList) {
+            if (loginKey.equals(agent.loginKey))
+                found = true;
         }
         return found;
+    }
+
+    private boolean checkBlockedWords(String message) {
+        for (int i = 0; i < blockedWords.length; i++) {
+            if (message.toLowerCase().indexOf(blockedWords[i].toLowerCase()) != -1)
+                return true;
+        }
+        return false;
     }
 }
