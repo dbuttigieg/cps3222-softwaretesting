@@ -71,6 +71,7 @@ public class MessagingSystem {
 //                        agent.sessionKey = RandomStringUtils.randomAlphanumeric(50);
                     agent.loginTime = System.currentTimeMillis();
                     sessionKey = generateSessionKey();
+                    agent.sessionKey = sessionKey;
                     message = "Login Successful";
                     agentList.remove(agent);
                 } else {
@@ -124,15 +125,14 @@ public class MessagingSystem {
      *
      * TODO: Checks that the sourceAgent is the same as the one currently logged in (by matching the session key).
      *
-     * @param sessionKey 50-char string for sending messages within the current session
      * @param sourceAgent agent sending the message
      * @param targetAgent agent receiving the message
      * @param message message to be sent
      * @return String message according to the sendMessage scenario
      */
-    public String sendMessage(String sessionKey, Agent sourceAgent, Agent targetAgent, String message) {
+    public String sendMessage(Agent sourceAgent, Agent targetAgent, String message) {
         String returnMessage = "";
-        if (sessionKey == this.sessionKey) {
+        if (this.sessionKey == sourceAgent.sessionKey) {
             if(agentList.contains(targetAgent)) {
                 if (!checkBlockedWords(message)) {
                     if (message.length() < 140) {

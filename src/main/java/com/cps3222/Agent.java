@@ -10,6 +10,7 @@ public class Agent {
     public String loginKey;
     public long loginTime;
     public Mailbox mailbox = new Mailbox();
+    public String sessionKey;
 
     /**
      * Default constructor for class Agent

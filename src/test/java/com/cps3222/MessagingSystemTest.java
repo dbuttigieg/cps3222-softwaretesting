@@ -34,6 +34,7 @@ public class MessagingSystemTest {
 
         when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
         ms.requestLogin(agent, supervisor);
+
     }
 
     //valid login within 1 minute
@@ -107,7 +108,7 @@ public class MessagingSystemTest {
     //target agent doesn't exist
     @Test
     public void targetAgentNotFound() throws Exception {
-        String returnMessage = ms.sendMessage(ms.sessionKey, agent, new Agent("008", "Tom"), "Hello");
+        String returnMessage = ms.sendMessage(agent, new Agent("008", "Tom"), "Hello");
 
         assertEquals("Target Agent not found", returnMessage);
     }
@@ -116,7 +117,7 @@ public class MessagingSystemTest {
     //for the purpose of this test, agent is sending to himself
     @Test
     public void messageHasBlockedWords() throws Exception {
-        String returnMessage = ms.sendMessage(ms.sessionKey, agent, agent, "Hello. Pass the salt.");
+        String returnMessage = ms.sendMessage(agent, agent, "Hello. Pass the salt.");
 
         assertEquals("Invalid message content", returnMessage);
     }
@@ -124,7 +125,7 @@ public class MessagingSystemTest {
     //message exceeds 140 characterlimit
     @Test
     public void messageExceedsCharLimit() throws Exception {
-        String returnMessage = ms.sendMessage(ms.sessionKey, agent, agent, "This is a dummy message. Testing for messages longer than 140 characters. Here goes the alphabet: a b c d e f g h i j k l m n o p q r s t u v w x y z, and the numbers 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42");
+        String returnMessage = ms.sendMessage(agent, agent, "This is a dummy message. Testing for messages longer than 140 characters. Here goes the alphabet: a b c d e f g h i j k l m n o p q r s t u v w x y z, and the numbers 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42");
 
         assertEquals("Message length exceeded", returnMessage);
     }
@@ -132,7 +133,7 @@ public class MessagingSystemTest {
     //message sent successfully
     @Test
     public void messageSent() throws Exception {
-        String returnMessage = ms.sendMessage(ms.sessionKey, agent, agent, "Hello");
+        String returnMessage = ms.sendMessage(agent, agent, "Hello");
 
         assertEquals("Message sent successfully", returnMessage);
     }
@@ -143,7 +144,7 @@ public class MessagingSystemTest {
         //Right now this is set at 23 since both source and target agent are the same,
         //therefore incrementing messageCount by 2.
         agent.mailbox.messageCount = 23;
-        String returnMessage = ms.sendMessage(ms.sessionKey, agent, agent, "Hello");
+        String returnMessage = ms.sendMessage(agent, agent, "Hello");
 
         assertEquals("Message sent successfully. Mailbox full. Logging out", returnMessage);
     }
@@ -152,7 +153,7 @@ public class MessagingSystemTest {
     @Test
     public void messageSent_targetAgentMailboxFull() throws Exception {
         agent.mailbox.messageCount = 23;
-        String returnMessage = ms.sendMessage(ms.sessionKey, agent, agent, "Hello");
+        String returnMessage = ms.sendMessage(agent, agent, "Hello");
 
         assertEquals("Message sent successfully. Mailbox full. Logging out", returnMessage);
     }
