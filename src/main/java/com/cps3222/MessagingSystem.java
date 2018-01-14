@@ -30,7 +30,7 @@ public class MessagingSystem {
      */
     public void requestLogin(Agent agent, Supervisor supervisor) {
         if(agent.login()) {
-            String supervisorLoginKey = supervisor.getLoginKey();
+            String supervisorLoginKey = supervisor.getLoginKey(agent);
 
             if (registerLoginKey(agent.id, supervisorLoginKey)) {
                 agent.loginKey = supervisorLoginKey;

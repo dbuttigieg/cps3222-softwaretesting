@@ -5,5 +5,5 @@ package com.cps3222;
  * @version 14/01/2018
  */
 public interface Supervisor {
-    String getLoginKey();
+    String getLoginKey(Agent agent);
 }
