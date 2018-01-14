@@ -70,7 +70,7 @@ public class MessagingSystem {
                     //if successfully logged in assign session key
 //                        agent.sessionKey = RandomStringUtils.randomAlphanumeric(50);
                     agent.loginTime = System.currentTimeMillis();
-                    sessionKey = generateSessionKey();
+                    generateSessionKey(agent);
                     message = "Login Successful";
                     agentList.remove(agent);
                 } else {
@@ -111,9 +111,10 @@ public class MessagingSystem {
      *
      * @return random 50-char alphanumeric string
      */
-    public String generateSessionKey() {
-        sessionStart = System.currentTimeMillis();
-        return RandomStringUtils.randomAlphanumeric(50);
+    public void generateSessionKey(Agent agent) {
+        String rndKey = RandomStringUtils.randomAlphanumeric(50);
+        sessionKey = rndKey;
+        agent.sessionKey = rndKey;
     }
 
     /**
@@ -130,9 +131,9 @@ public class MessagingSystem {
      * @param message message to be sent
      * @return String message according to the sendMessage scenario
      */
-    public String sendMessage(String sessionKey, Agent sourceAgent, Agent targetAgent, String message) {
+    public String sendMessage(Agent sourceAgent, Agent targetAgent, String message) {
         String returnMessage = "";
-        if (sessionKey == this.sessionKey) {
+        if (sourceAgent.sessionKey == sessionKey) {
             if(agentList.contains(targetAgent)) {
                 if (!checkBlockedWords(message)) {
                     if (message.length() < 140) {

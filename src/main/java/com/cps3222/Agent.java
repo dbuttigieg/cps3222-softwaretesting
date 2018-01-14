@@ -9,6 +9,7 @@ public class Agent {
     public String name;
     public String loginKey;
     public long loginTime;
+    public String sessionKey;
     public Mailbox mailbox = new Mailbox();
 
     /**
