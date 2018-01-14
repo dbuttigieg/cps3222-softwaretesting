@@ -11,7 +11,6 @@ public class Agent {
     public long loginTime;
     public String sessionKey;
     public Mailbox mailbox = new Mailbox();
-    public String sessionKey;
 
     /**
      * Default constructor for class Agent
