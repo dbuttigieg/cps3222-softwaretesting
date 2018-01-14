@@ -36,7 +36,7 @@ public class MessagingSystemTest {
 
         MockitoAnnotations.initMocks(this);
 
-        when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
+        when(supervisor.getLoginKey(agent)).thenReturn(generateLoginKey.getLoginKey(agent));
         ms.requestLogin(agent, supervisor);
 
     }

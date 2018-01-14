@@ -29,7 +29,7 @@ public class AgentTest {
         assertEquals(true, loginSuccess);
 
         StubGenerateLoginKey stubGenerateLoginKey = new StubGenerateLoginKey();
-        sender_agent.loginKey = stubGenerateLoginKey.getLoginKey();
+        sender_agent.loginKey = stubGenerateLoginKey.getLoginKey(sender_agent);
         assertEquals(sender_agent.loginKey, "ABCDE12345");
     }
 

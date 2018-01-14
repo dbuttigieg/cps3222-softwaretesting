@@ -8,9 +8,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title>$Title$</title>
+    <title>Hello Worlds</title>
   </head>
   <body>
-  $END$
+  <h3>Hello World. The time is <%= new java.util.Date() %></h3>
   </body>
 </html>
