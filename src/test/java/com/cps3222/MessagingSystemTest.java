@@ -141,7 +141,7 @@ public class MessagingSystemTest {
         assertEquals("Message sent successfully", returnMessage);
     }
 
-    //message sent successfully
+    //message sent successfully and source agent mailbox full
     @Test
     public void messageSent_sourceAgentMailboxFull() throws Exception {
         //Right now this is set at 23 since both source and target agent are the same,
@@ -152,7 +152,7 @@ public class MessagingSystemTest {
         assertEquals("Message sent successfully. Mailbox full. Logging out", returnMessage);
     }
 
-    //message sent successfully
+    //message sent successfully and target agent mailbox full
     @Test
     public void messageSent_targetAgentMailboxFull() throws Exception {
         agent.mailbox.messageCount = 23;
