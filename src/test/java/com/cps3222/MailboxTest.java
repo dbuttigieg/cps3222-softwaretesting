@@ -9,7 +9,8 @@ import java.util.Queue;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by denise on 02/01/2018.
+ * @author Denise Buttigieg, Raoul Fenech
+ * @version 14/01/2018
  */
 public class MailboxTest {
 
@@ -35,7 +36,6 @@ public class MailboxTest {
 
     @Test
     public void testConsumeMessage_emptyMailbox() throws Exception {
-
         //making the queue empty
         mockMailbox.remove();
         mockMailbox.remove();
@@ -57,7 +57,6 @@ public class MailboxTest {
 
     @Test
     public void testHasMessages() throws Exception {
-
         assertEquals(true, m.hasMessages(mockMailbox));
     }
 

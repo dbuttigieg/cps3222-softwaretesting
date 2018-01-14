@@ -3,10 +3,7 @@ package com.cps3222;
 import com.cps3222.stubs.StubGenerateLoginKey;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -14,27 +11,20 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by denise on 02/01/2018.
+ * @author Denise Buttigieg, Raoul Fenech
+ * @version 14/01/2018
  */
 public class MessagingSystemTest {
 
     private Agent agent;
-    //private Agent mockAgent1;
-    //private Agent mockAgent2;
-    //private Agent mockAgent3;
     private MessagingSystem ms;
     private StubGenerateLoginKey generateLoginKey;
     private Supervisor supervisor;
-//    @Mock
-//    Supervisor supervisor;
+
 
     @Before
     public void setUp() throws Exception {
         supervisor = mock(Supervisor.class);
-
-        //mockAgent1 = new Agent("1", "Denise");
-        //mockAgent2 = new Agent("2", "Dennis");
-        //mockAgent3 = new Agent("3", "Dettol");
         agent = new Agent("007", "Roll");
 
         ms = new MessagingSystem();
@@ -44,8 +34,6 @@ public class MessagingSystemTest {
 
         when(supervisor.getLoginKey()).thenReturn(generateLoginKey.getLoginKey());
         ms.requestLogin(agent, supervisor);
-        //ms.requestLogin(mockAgent1, supervisor);
-        //ms.requestLogin(mockAgent2, supervisor);
     }
 
     //valid login within 1 minute

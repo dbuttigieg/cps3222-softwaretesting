@@ -1,17 +1,33 @@
 package com.cps3222;
 
 /**
- * Created by denise on 02/01/2018.
+ * @author Denise Buttigieg, Raoul Fenech
+ * @version 14/01/2018
+ *
+ * NOTE: There were no specific tests created for this class at this point since
+ * coverage was tested by using the class in other methods.
  */
+
 public class Message {
     public Agent sourceAgent;
     public Agent targetAgent;
     public long timestamp;
     public String content;
 
+    /**
+     * Default constructor for Message Clas
+     */
     public Message() {
     }
 
+    /**
+     * Constructor for Message class to create a message with specific parameters
+     *
+     * @param sourceAgent agent who is sending the message
+     * @param targetAgent agent who is receiving the message
+     * @param content message
+     * @param timestamp timestamp of when the message was created
+     */
     public Message(Agent sourceAgent, Agent targetAgent, String content, long timestamp){
         this.sourceAgent = sourceAgent;
         this.targetAgent = targetAgent;
@@ -19,5 +35,3 @@ public class Message {
         this.timestamp = timestamp;
     }
 }
-//this class was not tested using its own seperate testing class since it is only used to store messages and thus
-//its functionality is tested in other classes.

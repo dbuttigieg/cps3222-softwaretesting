@@ -4,38 +4,64 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Created by denise on 02/01/2018.
+ * @author Denise Buttigieg, Raoul Fenech
+ * @version 14/01/2018
+ *
+ * Class holds all messages for an agent
  */
-//holds all messages for a user
+
 public class Mailbox {
     public String ownerID;
     public int messageCount = 0;
     Queue<Message> mailboxQueue = new LinkedList<Message>();
 
+    /**
+     * Default constructor for Mailbox class
+     */
     public Mailbox(){
     }
 
+    /**
+     * Constructor to create a Mailbox for a specific Agent
+     *
+     * @param ownerID agent ID
+     */
     public Mailbox(String ownerID) {
        this.ownerID = ownerID;
     }
 
+    /**
+     * Adds message to mailbox
+     *
+     * @param m message
+     */
     public void addMessage(Message m){
         mailboxQueue.add(m);
     }
 
+    /**
+     * Returns the next message in the queue
+     *
+     * @param q Queue data structure to hold the messages in a FIFO manner
+     * @return the next message in the queue
+     */
     public Message consumeNextMessage(Queue<Message> q) {
-        //Returns the next message in the box on a FIFO basis.
         Message messageToConsume;
         if (q.isEmpty()) return null;
         else {
             messageToConsume = q.peek();
             q.remove();
-            return messageToConsume;
         }
+        return messageToConsume;
     }
 
+    /**
+     * Cheks if there are any messages in the mailbox
+     *
+     * @param q Queue data structure to hold the messages in a FIFO manner
+     * @return true if empty, false if not empty
+     */
     public boolean hasMessages(Queue<Message> q) {
-        //Checks if there are any messages in the mailbox.
         return !q.isEmpty();
     }
 }
