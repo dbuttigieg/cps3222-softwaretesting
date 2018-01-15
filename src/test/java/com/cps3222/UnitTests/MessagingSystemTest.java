@@ -56,7 +56,7 @@ public class MessagingSystemTest {
         agent.loginTime += 700000;
         String message = ms.login(agent, agent.loginKey);
 
-        assertTrue((agent.loginTime)-System.currentTimeMillis() > 60000);
+        assertTrue((agent.loginTime) - System.currentTimeMillis() > 60000);
         assertEquals("Login Timeout", message);
     }
 
