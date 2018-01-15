@@ -8,14 +8,17 @@
 <%@ page import="com.cps3222.*" contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Request Key Page</title>
+    <title>Request Key</title>
 </head>
     <body>
         <form action="RequestLoginServlet" method="GET">
             ID: <input type="text" name="idField">
             <br/><br/>
 
-            <input type="submit" value="Request Login">
+            Name: <input type="text" name="nameField">
+            <br/><br/>
+
+            <input type="submit" value="Request Login" name="requestLoginButton">
         </form>
     </body>
 </html>

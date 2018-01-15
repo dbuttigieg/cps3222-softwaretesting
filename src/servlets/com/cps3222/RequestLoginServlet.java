@@ -16,18 +16,6 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/RequestLoginServlet")
 public class RequestLoginServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    public Agent agent =  new Agent();
-    public MessagingSystem ms = new MessagingSystem();
-    public Supervisor supervisor = new Supervisor() {
-        public String getLoginKey(Agent agent) {
-            if (agent.id.substring(0, 2) != "spy") {
-                return "ABCDE12345";
-            }
-            return null;
-        }
-    };
-
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -40,31 +28,27 @@ public class RequestLoginServlet extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        agent.id = request.getParameter("idField");
+        Main.agent.id = request.getParameter("idField");
+        Main.agent.name = request.getParameter("nameField");
+
         /*
         for (Agent a : ms.agentList) {
             if (a.id == request.getParameter("idField"));
                 agent = a;
         }*/
 
-        ms.requestLogin(agent, supervisor);
+        Main.ms.requestLogin(Main.agent, Main.supervisor);
 
-        request.setAttribute("id", agent.id);
-        request.setAttribute("loginkey", agent.loginKey);
+        request.setAttribute("id", Main.agent.id);
+        request.setAttribute("name", Main.agent.name);
+        request.setAttribute("loginkey", Main.agent.loginKey);
 
         RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
         rd.forward(request, response);
     }
-
-
-
-
-
-
-
-
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

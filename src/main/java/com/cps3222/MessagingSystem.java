@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class MessagingSystem {
     public ArrayList<Agent> agentList = new ArrayList<Agent>();
+    public ArrayList<Agent> loggedInAgents = new ArrayList<Agent>();
     private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
     public String sessionKey = "";
     public long sessionStart;
@@ -72,6 +73,7 @@ public class MessagingSystem {
                     agent.loginTime = System.currentTimeMillis();
                     generateSessionKey(agent);
                     message = "Login Successful";
+                    loggedInAgents.add(agent);
                     agentList.remove(agent);
                 } else {
                     message = "Invalid Login Key";
@@ -112,7 +114,7 @@ public class MessagingSystem {
      * @return random 50-char alphanumeric string
      */
     public void generateSessionKey(Agent agent) {
-        String rndKey = RandomStringUtils.randomAlphanumeric(50);
+        String rndKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
         sessionKey = rndKey;
         agent.sessionKey = rndKey;
     }
@@ -134,7 +136,7 @@ public class MessagingSystem {
     public String sendMessage(Agent sourceAgent, Agent targetAgent, String message) {
         String returnMessage = "";
         if (sourceAgent.sessionKey == sessionKey) {
-            if(agentList.contains(targetAgent)) {
+            if(loggedInAgents.contains(targetAgent)) {
                 if (!checkBlockedWords(message)) {
                     if (message.length() < 140) {
                         //sending message through sendMessage method in Agent

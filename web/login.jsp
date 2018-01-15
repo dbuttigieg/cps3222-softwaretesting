@@ -8,19 +8,22 @@
 <%@ page import="com.cps3222.*" contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Agent Login Page</title>
+    <title>Agent Login</title>
 </head>
     <body>
 
         Your login key is: ${loginkey}
-        <form action="LoginServlet">
+        <form action="LoginServlet" method="GET">
             ID: <input type="text" name="idField" value=${id}>
+            <br/><br/>
+
+            Name: <input type="text" name="nameField" value=${name}>
             <br/><br/>
 
             Login key: <input type="text" name="loginKeyField">
             <br/><br/>
 
-            <input type="submit" onclick="" value="Login">
+            <input type="submit" value="Login">
         </form>
     </body>
 </html>

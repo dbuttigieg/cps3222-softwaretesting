@@ -1,30 +1,26 @@
 package com.cps3222;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Servlet implementation class StudentServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/MessageServlet")
+public class MessageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public RequestDispatcher rd;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public MessageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,25 +30,20 @@ public class LoginServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String returnMessage = Main.ms.login(Main.agent, request.getParameter("loginKeyField"));
+        Agent targetAgent = new Agent();
+        targetAgent.id = request.getParameter("idField");
 
-        ArrayList<Message> messages = new ArrayList<Message>();
-        Main.mailbox = Main.agent.mailbox;
-        for(Message m : Main.mailbox.mailboxQueue){
-            messages.add(m);
+        for(Agent a : Main.ms.loggedInAgents){
+            if(a.id.equals(targetAgent.id))
+                targetAgent = a;
         }
 
-        request.setAttribute("messages", messages);
-        request.setAttribute("loginReturnMessage", returnMessage);
+        String messageResponse = Main.ms.sendMessage(Main.agent, targetAgent, request.getParameter("msgField"));
 
-        if(returnMessage!= "Login Successful") {
-            rd = request.getRequestDispatcher("/loginerror.jsp");
-            rd.forward(request, response);
-        }
-        else {
-            rd = request.getRequestDispatcher("/mailbox.jsp");
-            rd.forward(request, response);
-        }
+        request.setAttribute("messageResponse", messageResponse);
+
+        rd = request.getRequestDispatcher("/messageresponse.jsp");
+        rd.forward(request, response);
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.cps3222;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import com.cps3222.Main;
+import com.cps3222.Message;
+import com.cps3222.RequestLoginServlet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,21 +10,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.swing.*;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Servlet implementation class StudentServlet
  */
-@WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/IndexRedirectServlet")
+public class IndexRedirectServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public RequestDispatcher rd;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public IndexRedirectServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,25 +34,8 @@ public class LoginServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String returnMessage = Main.ms.login(Main.agent, request.getParameter("loginKeyField"));
-
-        ArrayList<Message> messages = new ArrayList<Message>();
-        Main.mailbox = Main.agent.mailbox;
-        for(Message m : Main.mailbox.mailboxQueue){
-            messages.add(m);
-        }
-
-        request.setAttribute("messages", messages);
-        request.setAttribute("loginReturnMessage", returnMessage);
-
-        if(returnMessage!= "Login Successful") {
-            rd = request.getRequestDispatcher("/loginerror.jsp");
-            rd.forward(request, response);
-        }
-        else {
-            rd = request.getRequestDispatcher("/mailbox.jsp");
-            rd.forward(request, response);
-        }
+        rd = request.getRequestDispatcher("/index.jsp");
+        rd.forward(request, response);
     }
 
     /**
