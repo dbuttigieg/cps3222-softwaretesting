@@ -65,7 +65,7 @@ public class MessagingSystem {
         if (requestLoginSuccess) {
             //if allowed, Agent can log in
             //allow 1 minute for login
-            if (agent.loginTime - System.currentTimeMillis() <= 60000) {
+            if (System.currentTimeMillis() - agent.loginTime  <= 60000) {
                 if (agent.loginKey.equals(key)) {
                     //if successfully logged in assign session key
 //                        agent.sessionKey = RandomStringUtils.randomAlphanumeric(50);
