@@ -1,9 +1,9 @@
 package com.cps3222;
 
+import java.util.ArrayList;
+
 public class Main {
 
-    public static Agent agent =  new Agent();
-    public static Mailbox mailbox =  new Mailbox();
     public static MessagingSystem ms = new MessagingSystem();
     public static Supervisor supervisor = new Supervisor() {
         public String getLoginKey(Agent agent) {

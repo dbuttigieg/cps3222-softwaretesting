@@ -16,6 +16,8 @@ import java.util.ArrayList;
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public RequestDispatcher rd;
+    public String returnMessage;
+
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -30,16 +32,20 @@ public class LoginServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String returnMessage = Main.ms.login(Main.agent, request.getParameter("loginKeyField"));
+        for(Agent a : Main.ms.agentList){
+            if(a.id.equals(request.getParameter("idField"))){
+                returnMessage = Main.ms.login(a, request.getParameter("loginKeyField"));
 
-        ArrayList<Message> messages = new ArrayList<Message>();
-        Main.mailbox = Main.agent.mailbox;
-        for(Message m : Main.mailbox.mailboxQueue){
-            messages.add(m);
+                ArrayList<Message> messages = new ArrayList<Message>();
+                for(Message m : a.mailbox.mailboxQueue){
+                    messages.add(m);
+                }
+
+                request.setAttribute("id", request.getParameter("idField"));
+                request.setAttribute("messages", messages);
+                request.setAttribute("loginReturnMessage", returnMessage);
+            }
         }
-
-        request.setAttribute("messages", messages);
-        request.setAttribute("loginReturnMessage", returnMessage);
 
         if(returnMessage != "Login Successful") {
             rd = request.getRequestDispatcher("/loginerror.jsp");

@@ -14,10 +14,10 @@
 
         Your login key is: ${loginkey}
         <form action="LoginServlet" method="GET">
-            ID: <input type="text" name="idField" value=${id}>
+            ID: <input type="text" name="idField" value="${id}" readonly>
             <br/><br/>
 
-            Name: <input type="text" name="nameField" value=${name}>
+            Name: <input type="text" name="nameField" value="${name}" readonly>
             <br/><br/>
 
             Login key: <input type="text" name="loginKeyField">

@@ -13,6 +13,8 @@
     <h3>${loginReturnMessage}</h3>
     <br/><br/>
     ${messageSuccess}
+    <br/>
+
     Mail:
     <br/>
     <%
@@ -29,13 +31,19 @@
     %>
     <br/><br/>
     <form action="MessageServlet" method="GET">
+        Your ID:
+        <input type="text" name="id" value="${id}"readonly>
+        <br/><br/>
+
         Target Agent ID: <input type="text" name="idField">
         <br/><br/>
 
         Send Message: <input type="text" name="msgField">
-        <br/>
+        <br/><br/>
 
-        <input type="submit" value="Send">
+        <input type="submit" value="Send" name="sendButton">
+        <input type="submit" value="Logout" name="logoutButton">
+
     </form>
 </head>
 <body>

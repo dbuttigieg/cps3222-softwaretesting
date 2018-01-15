@@ -56,6 +56,7 @@ public class Agent {
      * @return logout message
      */
     public String logout(){
+
         return "Message sent successfully. Mailbox full. Logging out";
     }
 }

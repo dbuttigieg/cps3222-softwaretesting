@@ -12,6 +12,8 @@
 </head>
     <body>
 
+        <input type="text" name="id" hidden>
+
         <h3>${messageResponse}</h3>
 
         <form action="MailboxRedirectServlet" method="GET">

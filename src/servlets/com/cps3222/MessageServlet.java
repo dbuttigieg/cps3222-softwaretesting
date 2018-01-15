@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class MessageServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public RequestDispatcher rd;
+    public String messageResponse;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -30,20 +31,29 @@ public class MessageServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Agent targetAgent = new Agent();
-        targetAgent.id = request.getParameter("idField");
+        if(request.getParameter("sendButton") != null){
 
-        for(Agent a : Main.ms.loggedInAgents){
-            if(a.id.equals(targetAgent.id))
-                targetAgent = a;
+            for(Agent targetAgent : Main.ms.agentList){
+                if(targetAgent.id.equals(request.getParameter("idField"))){
+
+                    for(Agent sourceAgent : Main.ms.agentList){
+                        if(sourceAgent.id.equals(request.getParameter("id"))){
+                            messageResponse = Main.ms.sendMessage(sourceAgent, targetAgent, request.getParameter("msgField"));
+
+                            request.setAttribute("messageResponse", messageResponse);
+                        }
+                    }
+                }
+            }
+
+            request.setAttribute("id", request.getParameter("id"));
+            rd = request.getRequestDispatcher("/messageresponse.jsp");
+            rd.forward(request, response);
         }
-
-        String messageResponse = Main.ms.sendMessage(Main.agent, targetAgent, request.getParameter("msgField"));
-
-        request.setAttribute("messageResponse", messageResponse);
-
-        rd = request.getRequestDispatcher("/messageresponse.jsp");
-        rd.forward(request, response);
+        else{
+            rd = request.getRequestDispatcher("/index.jsp");
+            rd.forward(request, response);
+        }
     }
 
     /**

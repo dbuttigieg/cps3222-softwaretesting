@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class MailboxRedirectServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public RequestDispatcher rd;
+    ArrayList<Message> messages = new ArrayList<Message>();
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -30,13 +31,14 @@ public class MailboxRedirectServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        ArrayList<Message> messages = new ArrayList<Message>();
-        Main.mailbox = Main.agent.mailbox;
-        for(Message m : Main.mailbox.mailboxQueue){
-            messages.add(m);
-        }
+        for(Agent a : Main.ms.agentList){
+            if(a.id.equals(request.getParameter("id")))
+                for(Message m : a.mailbox.mailboxQueue){
+                    messages.add(m);
+                }
 
-        request.setAttribute("messages", messages);
+                request.setAttribute("messages", messages);
+        }
 
         rd = request.getRequestDispatcher("/mailbox.jsp");
         rd.forward(request, response);

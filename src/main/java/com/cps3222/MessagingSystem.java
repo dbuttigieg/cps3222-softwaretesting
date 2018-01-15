@@ -9,11 +9,11 @@ import java.util.Random;
  */
 
 public class MessagingSystem {
-    public ArrayList<Agent> agentList = new ArrayList<Agent>();
-    public ArrayList<Agent> loggedInAgents = new ArrayList<Agent>();
+    public static ArrayList<Agent> agentList = new ArrayList<Agent>();
     private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
     public String sessionKey = "";
     public long sessionStart;
+    private boolean existingAgent = false;
     boolean requestLoginSuccess = false;
 
     /**
@@ -33,11 +33,19 @@ public class MessagingSystem {
             String supervisorLoginKey = supervisor.getLoginKey(agent);
 
             if (registerLoginKey(agent.id, supervisorLoginKey)) {
-                agent.loginKey = supervisorLoginKey;
-                agent.loginTime = System.currentTimeMillis();
-                agentList.add(agent);
+                for(Agent a : agentList){
+                    if(a.id.equals(agent.id)) {
+                        a.loginKey = supervisorLoginKey;
+                        a.loginTime = System.currentTimeMillis();
+                        existingAgent = true;
+                    }
+                }
+                if(existingAgent != true) {
+                    agent.loginKey = supervisorLoginKey;
+                    agent.loginTime = System.currentTimeMillis();
+                    agentList.add(agent);
+                }
                 requestLoginSuccess = true;
-
             } else {
                requestLoginSuccess = false;
             }
@@ -75,8 +83,6 @@ public class MessagingSystem {
                     agent.sessionKey = sessionKey;
 
                     message = "Login Successful";
-                    loggedInAgents.add(agent);
-                    agentList.remove(agent);
                 } else {
                     message = "Invalid Login Key";
                 }
@@ -145,8 +151,8 @@ public class MessagingSystem {
      */
     public String sendMessage(Agent sourceAgent, Agent targetAgent, String message) {
         String returnMessage = "";
-        if (sourceAgent.sessionKey == sessionKey) {
-            if(loggedInAgents.contains(targetAgent)) {
+        if (sourceAgent.sessionKey.equals(sessionKey)) {
+            if(agentList.contains(targetAgent)) {
                 if (!checkBlockedWords(message)) {
                     if (message.length() < 140) {
                         //sending message through sendMessage method in Agent

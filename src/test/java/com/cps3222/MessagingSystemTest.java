@@ -67,16 +67,6 @@ public class MessagingSystemTest {
         assertEquals("Invalid Login Key", message);
     }
 
-    //3 agents initially: agent, mockAgent1, mockAgent2
-    //checks if agent was removed
-    @Test
-    public void login_checkRemovedAgent() throws Exception {
-        String message = ms.login(agent, agent.loginKey);
-
-        assertTrue(ms.agentList.size() == 0);
-        assertEquals("Login Successful", message);
-    }
-
     //registering a key with invalid length
     @Test
     public void register_invalidKeyLength() throws Exception {

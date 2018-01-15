@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet("/RequestLoginServlet")
 public class RequestLoginServlet extends HttpServlet {
+    public Agent currAgent;
 
     /**
      * @see HttpServlet#HttpServlet()
@@ -31,8 +32,8 @@ public class RequestLoginServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Main.agent.id = request.getParameter("idField");
-        Main.agent.name = request.getParameter("nameField");
+        String agentId = request.getParameter("idField");
+        String agentName = request.getParameter("nameField");
 
         /*
         for (Agent a : ms.agentList) {
@@ -40,11 +41,15 @@ public class RequestLoginServlet extends HttpServlet {
                 agent = a;
         }*/
 
-        Main.ms.requestLogin(Main.agent, Main.supervisor);
+        Main.ms.requestLogin(new Agent(agentId, agentName), Main.supervisor);
 
-        request.setAttribute("id", Main.agent.id);
-        request.setAttribute("name", Main.agent.name);
-        request.setAttribute("loginkey", Main.agent.loginKey);
+        for(Agent a : Main.ms.agentList){
+            if(a.id.equals(agentId)) {
+                request.setAttribute("id", agentId);
+                request.setAttribute("name", agentName);
+                request.setAttribute("loginkey", a.loginKey);
+            }
+        }
 
         RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
         rd.forward(request, response);
