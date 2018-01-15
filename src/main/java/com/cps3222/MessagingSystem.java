@@ -1,8 +1,7 @@
 package com.cps3222;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * @author Denise Buttigieg, Raoul Fenech
@@ -71,7 +70,10 @@ public class MessagingSystem {
                     //if successfully logged in assign session key
 //                        agent.sessionKey = RandomStringUtils.randomAlphanumeric(50);
                     agent.loginTime = System.currentTimeMillis();
-                    generateSessionKey(agent);
+                    //generate sessionkey and assign to agent
+                    sessionKey = generateAlphaNumericString(50);
+                    agent.sessionKey = sessionKey;
+
                     message = "Login Successful";
                     loggedInAgents.add(agent);
                     agentList.remove(agent);
@@ -113,10 +115,19 @@ public class MessagingSystem {
      *
      * @return random 50-char alphanumeric string
      */
-    public void generateSessionKey(Agent agent) {
-        String rndKey = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-        sessionKey = rndKey;
-        agent.sessionKey = rndKey;
+    public String generateAlphaNumericString(int stringLength) {
+        String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerCaseLetters = upperCaseLetters.toLowerCase();
+        String numbers = "0123456789";
+        String alphanumerical = upperCaseLetters + lowerCaseLetters + numbers;
+
+        Random r = new Random();
+        String alphaNumericString = "";
+
+        for (int i=0; i<stringLength; i++) {
+            alphaNumericString += alphanumerical.charAt(r.nextInt(alphanumerical.length()));
+        }
+        return alphaNumericString;
     }
 
     /**
@@ -127,7 +138,6 @@ public class MessagingSystem {
      *
      * TODO: Checks that the sourceAgent is the same as the one currently logged in (by matching the session key).
      *
-     * @param sessionKey 50-char string for sending messages within the current session
      * @param sourceAgent agent sending the message
      * @param targetAgent agent receiving the message
      * @param message message to be sent
