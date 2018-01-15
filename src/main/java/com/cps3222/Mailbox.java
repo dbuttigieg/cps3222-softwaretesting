@@ -13,7 +13,7 @@ import java.util.Queue;
 public class Mailbox {
     public String ownerID;
     public int messageCount = 0;
-    Queue<Message> mailboxQueue = new LinkedList<Message>();
+    public Queue<Message> mailboxQueue = new LinkedList<Message>();
 
     /**
      * Default constructor for Mailbox class
@@ -50,7 +50,13 @@ public class Mailbox {
         if (q.isEmpty()) return null;
         else {
             messageToConsume = q.peek();
-            q.remove();
+            if(System.currentTimeMillis() - messageToConsume.timestamp <= 30000) {
+                q.remove();
+            }
+            else{
+                q.remove();
+                messageToConsume = consumeNextMessage(q);
+            }
         }
         return messageToConsume;
     }

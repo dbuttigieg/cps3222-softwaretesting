@@ -12,12 +12,12 @@
 </head>
     <body>
 
-        <input type="text" name="id" hidden>
-
         <h3>${messageResponse}</h3>
 
         <form action="MailboxRedirectServlet" method="GET">
-            <input type="submit" value="Back to Mailbox"  name="backToMailboxButton">
+            <input type="text" name="id" value="${id}" hidden>
+
+            <input type="submit" value="Back to Messaging System"  name="backToMailboxButton">
         </form>
     </body>
 </html>

@@ -52,7 +52,7 @@ public class LoginServlet extends HttpServlet {
             rd.forward(request, response);
         }
         else {
-            rd = request.getRequestDispatcher("/mailbox.jsp");
+            rd = request.getRequestDispatcher("/messagingsystem.jsp");
             rd.forward(request, response);
         }
     }

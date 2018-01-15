@@ -12,16 +12,16 @@ import java.util.ArrayList;
 /**
  * Servlet implementation class StudentServlet
  */
-@WebServlet("/MailboxRedirectServlet")
-public class MailboxRedirectServlet extends HttpServlet {
+@WebServlet("/MailboxServlet")
+public class MailboxServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     public RequestDispatcher rd;
-    ArrayList<Message> messages = new ArrayList<Message>();
+    public String mailboxReturnMessage;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MailboxRedirectServlet() {
+    public MailboxServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,16 +32,19 @@ public class MailboxRedirectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         for(Agent a : Main.ms.agentList){
-            if(a.id.equals(request.getParameter("id")))
-                for(Message m : a.mailbox.mailboxQueue){
-                    messages.add(m);
+            if(a.id.equals(request.getParameter("id"))) {
+                if(a.mailbox.hasMessages(a.mailbox.mailboxQueue) == true) {
+                    mailboxReturnMessage = "You've got mail!";
                 }
-
-                request.setAttribute("messages", messages);
+                else
+                    mailboxReturnMessage = "No mail.";
+            }
         }
 
+        request.setAttribute("returnMessage", mailboxReturnMessage);
         request.setAttribute("id", request.getParameter("id"));
-        rd = request.getRequestDispatcher("/messagingsystem.jsp");
+
+        rd = request.getRequestDispatcher("/mailbox.jsp");
         rd.forward(request, response);
     }
 
