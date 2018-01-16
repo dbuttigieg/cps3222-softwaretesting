@@ -33,6 +33,16 @@ public class MailboxServlet extends HttpServlet {
 
         for(Agent a : Main.ms.agentList){
             if(a.id.equals(request.getParameter("id"))) {
+                if(System.currentTimeMillis() - a.loginTime >= 600000){
+                    request.setAttribute("messageResponse", "Session timeout");
+                    rd = request.getRequestDispatcher("/index.jsp");
+                    rd.forward(request, response);
+                }
+            }
+        }
+
+        for(Agent a : Main.ms.agentList){
+            if(a.id.equals(request.getParameter("id"))) {
                 if(a.mailbox.hasMessages(a.mailbox.mailboxQueue) == true) {
                     mailboxReturnMessage = "You've got mail!";
                 }

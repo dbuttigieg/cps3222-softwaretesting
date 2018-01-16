@@ -30,6 +30,16 @@ public class ConsumeMessageServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        for(Agent a : Main.ms.agentList){
+            if(a.id.equals(request.getParameter("id"))) {
+                if(System.currentTimeMillis() - a.loginTime >= 600000){
+                    request.setAttribute("messageResponse", "Session timeout");
+                    rd = request.getRequestDispatcher("/index.jsp");
+                    rd.forward(request, response);
+                }
+            }
+        }
+
         if(request.getParameter("consumeMessageButton") != null) {
             for (Agent a : Main.ms.agentList) {
                 if (a.id.equals(request.getParameter("id"))) {
@@ -47,6 +57,9 @@ public class ConsumeMessageServlet extends HttpServlet {
                         Message receivingMessage = a.mailbox.consumeNextMessage(a.mailbox.mailboxQueue);
                         request.setAttribute("messageFrom", "From: " + receivingMessage.sourceAgent.name);
                         request.setAttribute("messageContent", "Content: " + receivingMessage.content);
+                    }
+                    else{
+                        request.setAttribute("noMessages", "All messages consumed.");
                     }
                 }
             }

@@ -50,13 +50,7 @@ public class Mailbox {
         if (q.isEmpty()) return null;
         else {
             messageToConsume = q.peek();
-            if(System.currentTimeMillis() - messageToConsume.timestamp <= 30000) {
-                q.remove();
-            }
-            else{
-                q.remove();
-                messageToConsume = consumeNextMessage(q);
-            }
+            q.remove();
         }
         return messageToConsume;
     }
@@ -68,6 +62,13 @@ public class Mailbox {
      * @return true if empty, false if not empty
      */
     public boolean hasMessages(Queue<Message> q) {
+        Message messageToConsume = q.peek();
+        if (messageToConsume != null) {
+            if (System.currentTimeMillis() - messageToConsume.timestamp >= 1800000) {
+                q.remove();
+            }
+        }
+
         return !q.isEmpty();
     }
 }

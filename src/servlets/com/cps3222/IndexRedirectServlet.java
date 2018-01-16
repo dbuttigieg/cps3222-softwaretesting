@@ -34,6 +34,16 @@ public class IndexRedirectServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        for(Agent a : Main.ms.agentList){
+            if(a.id.equals(request.getParameter("id"))) {
+                if(System.currentTimeMillis() - a.loginTime >= 600000){
+                    request.setAttribute("messageResponse", "Session timeout");
+                    rd = request.getRequestDispatcher("/index.jsp");
+                    rd.forward(request, response);
+                }
+            }
+        }
+
         rd = request.getRequestDispatcher("/index.jsp");
         rd.forward(request, response);
     }

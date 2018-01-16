@@ -32,6 +32,16 @@ public class MailboxRedirectServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         for(Agent a : Main.ms.agentList){
+            if(a.id.equals(request.getParameter("id"))) {
+                if(System.currentTimeMillis() - a.loginTime >= 600000){
+                    request.setAttribute("messageResponse", "Session timeout");
+                    rd = request.getRequestDispatcher("/index.jsp");
+                    rd.forward(request, response);
+                }
+            }
+        }
+
+        for(Agent a : Main.ms.agentList){
             if(a.id.equals(request.getParameter("id")))
                 for(Message m : a.mailbox.mailboxQueue){
                     messages.add(m);

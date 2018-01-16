@@ -18,7 +18,8 @@
 
             <input type="submit" name="consumeMessageButton" value="Get Next Message">
 
-            <p>${messageFrom}<br/>
+            <p>${noMessages}<br/>
+                ${messageFrom}<br/>
                 ${messageContent}<br/>
                 ${messageTime}<br/></p>
             <br/><br/>

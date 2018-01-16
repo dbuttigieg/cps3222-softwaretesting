@@ -11,7 +11,10 @@
     <title>Request Key</title>
 </head>
     <body>
+
+    <h3>${messageResponse}</h3>
         <form action="RequestLoginServlet" method="GET">
+
             ID: <input type="text" name="idField">
             <br/><br/>
 

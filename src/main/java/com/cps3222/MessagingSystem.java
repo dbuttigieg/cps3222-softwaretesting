@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class MessagingSystem {
     public static ArrayList<Agent> agentList = new ArrayList<Agent>();
-    private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear", "dish", "salt"};
+    private String blockedWords[] = new String[]{"recipe", "ginger", "nuclear"};
     public String sessionKey = "";
     public long sessionStart;
     private boolean existingAgent = false;
@@ -153,29 +153,26 @@ public class MessagingSystem {
         String returnMessage = "";
         if (sourceAgent.sessionKey.equals(sessionKey)) {
             if(agentList.contains(targetAgent)) {
-                if (!checkBlockedWords(message)) {
-                    if (message.length() < 140) {
-                        //sending message through sendMessage method in Agent
-                        Message m = new Message(sourceAgent, targetAgent, message, System.currentTimeMillis());
-                        sourceAgent.sendMessage(m);
+                message = checkBlockedWords(message);
+                if (message.length() < 140) {
+                    //sending message through sendMessage method in Agent
+                    Message m = new Message(sourceAgent, targetAgent, message, System.currentTimeMillis());
+                    sourceAgent.sendMessage(m);
 
-                        //incrementing messagecount for both source and target agent
-                        sourceAgent.mailbox.messageCount++;
-                        targetAgent.mailbox.messageCount++;
+                    //incrementing messagecount for both source and target agent
+                    sourceAgent.mailbox.messageCount++;
+                    targetAgent.mailbox.messageCount++;
 
-                        //checks if mailbox limit has been reached and logs agents out accordingly.
-                        if(checkAgentMailbox(sourceAgent) == 25)
-                            returnMessage = sourceAgent.logout();
+                    //checks if mailbox limit has been reached and logs agents out accordingly.
+                    if(checkAgentMailbox(sourceAgent) == 25)
+                        returnMessage = sourceAgent.logout();
 
-                        if(checkAgentMailbox(targetAgent) == 25)
-                            returnMessage = targetAgent.logout();
-                        else
-                            returnMessage = "Message sent successfully";
-                    } else {
-                        returnMessage = "Message length exceeded";
-                    }
+                    if(checkAgentMailbox(targetAgent) == 25)
+                        returnMessage = targetAgent.logout();
+                    else
+                        returnMessage = "Message sent successfully";
                 } else {
-                    returnMessage = "Invalid message content";
+                    returnMessage = "Message length exceeded";
                 }
             } else {
                 returnMessage = "Target Agent not found";
@@ -226,11 +223,11 @@ public class MessagingSystem {
      * @param message the message
      * @return true if the message contains no blocked wods
      */
-    private boolean checkBlockedWords(String message) {
+    private String checkBlockedWords(String message) {
+        message = message.toLowerCase();
         for (int i = 0; i < blockedWords.length; i++) {
-            if (message.toLowerCase().indexOf(blockedWords[i].toLowerCase()) != -1)
-                return true;
+            message = message.replace (blockedWords[i], "");
         }
-        return false;
+        return message;
     }
 }
