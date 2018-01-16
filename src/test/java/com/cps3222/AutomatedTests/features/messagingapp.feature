@@ -3,14 +3,14 @@ Feature: Messaging Application Feature
 
   Scenario: Successful Login
     Given I am an agent trying to log in
-    When I obtain a key from the supervisor using a valid id
+    When I obtain a key from the supervisor using a valid id as "007" and name as "raoul"
     Then the supervisor should give me a valid key
     When I log in using that key
     Then I should be allowed to log in
 
   Scenario: Login Timeout
     Given I am an agent trying to log in
-    When I obtain a key from the supervisor using a valid id
+    When I obtain a key from the supervisor using a valid id as "007" and name as "raoul"
     Then the supervisor should give me a valid key
     When I wait for 65 seconds
     And I log in using that key
