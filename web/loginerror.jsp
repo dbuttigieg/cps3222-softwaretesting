@@ -12,7 +12,7 @@
 </head>
     <body>
 
-        <h3>${loginReturnMessage}</h3>
+        <h3 name="errorMessage">${loginReturnMessage}</h3>
 
         <form action="IndexRedirectServlet" method="GET">
             <input type="submit" value="Back to Index Page">

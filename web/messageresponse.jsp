@@ -12,7 +12,7 @@
 </head>
     <body>
 
-        <h3>${messageResponse}</h3>
+        <h3 name="returnMessage">${messageResponse}</h3>
 
         <form action="MailboxRedirectServlet" method="GET">
             <input type="text" name="id" value="${id}" hidden>

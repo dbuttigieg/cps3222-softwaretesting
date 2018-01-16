@@ -1,9 +1,7 @@
 package com.cps3222.AutomatedTests.stepdefs;
 
 import com.cps3222.Agent;
-import com.cps3222.AutomatedTests.PageObjects.LoginPage;
-import com.cps3222.AutomatedTests.PageObjects.MessagingSystemPage;
-import com.cps3222.AutomatedTests.PageObjects.RequestLoginPage;
+import com.cps3222.AutomatedTests.PageObjects.*;
 import com.cps3222.Supervisor;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
@@ -26,6 +24,8 @@ public class MessagingAppStepDefs {
     RequestLoginPage requestLoginPage;
     LoginPage loginPage;
     MessagingSystemPage messagingSystemPage;
+    LoginErrorPage loginErrorPage;
+    MessageResponsePage messageResponsePage;
 
     @Before
     public void setup() {
@@ -71,27 +71,65 @@ public class MessagingAppStepDefs {
 
     @When("^I wait for (\\d+) seconds$")
     public void iWaitForSeconds(int arg0) throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        Thread.sleep(65000);
     }
 
     @Then("^I should not be allowed to log in$")
     public void iShouldNotBeAllowedToLogIn() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        loginErrorPage = new LoginErrorPage(browser);
+        String errorMessage = loginErrorPage.obtainErrorMessage();
+        assertEquals("Login Timeout", errorMessage);
     }
+
+    /**SCENARIO 3**/
 
     @Given("^I am a logged in agent$")
     public void iAmALoggedInAgent() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        browser.get("localhost:8080/");
+
+        //logging in another agent to allow message sending
+        requestLoginPage = new RequestLoginPage(browser);
+        requestLoginPage.populateKeyForm("001", "denise");
+        requestLoginPage.submitKeyForm();
+
+        loginPage = new LoginPage(browser);
+        String key = loginPage.obtainSupervisorKey();
+        loginPage.populateLoginForm(key);
+        loginPage.submitLoginForm();
+
+        //logging out this agent
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.logout();
+
+        //logging in the source agent to send messages
+        requestLoginPage = new RequestLoginPage(browser);
+        requestLoginPage.populateKeyForm("007", "raoul");
+        requestLoginPage.submitKeyForm();
+
+        loginPage = new LoginPage(browser);
+        String key2 = loginPage.obtainSupervisorKey();
+        loginPage.populateLoginForm(key2);
+        loginPage.submitLoginForm();
     }
 
     @When("^I attempt to send (\\d+) messages$")
     public void iAttemptToSendMessages(int arg0) throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        for(int i = 0; i < 24; i++) {
+            messagingSystemPage = new MessagingSystemPage(browser);
+            messagingSystemPage.sendMessage("message");
+            messageResponsePage = new MessageResponsePage(browser);
+            messageResponsePage.backToSystem();
+        }
+        //to enable next scenario step
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.sendMessage("message");
+        messageResponsePage = new MessageResponsePage(browser);
     }
 
     @Then("^the messages should be successfully sent$")
     public void theMessagesShouldBeSuccessfullySent() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        String successMessage = messageResponsePage.getSuccessMessage();
+        assertEquals("Message sent successfully", successMessage);
     }
 
     @When("^I try to send another message$")

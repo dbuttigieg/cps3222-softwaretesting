@@ -22,15 +22,4 @@ public class LoginPage extends Page{
         return find("yourLoginKey").getAttribute("value");
     }
 
-    /*
-    // Method to automatically login the agent
-    public void login(){
-        goTo();
-        submit();
-    }
-
-    // Method to go back to the home page
-    public void back(){
-        find("backButton").click();
-    }*/
 }

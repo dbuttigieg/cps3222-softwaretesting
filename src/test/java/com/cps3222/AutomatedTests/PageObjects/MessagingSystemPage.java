@@ -8,4 +8,11 @@ public class MessagingSystemPage extends Page{
         super(browser);
     }
 
+    public void sendMessage(String msg){
+        find("msgField").sendKeys(msg);
+    }
+
+    public void logout(){
+        find("logoutButton").click();
+    }
 }

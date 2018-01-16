@@ -51,6 +51,7 @@ public class Mailbox {
         else {
             messageToConsume = q.peek();
             q.remove();
+            messageCount++;
         }
         return messageToConsume;
     }

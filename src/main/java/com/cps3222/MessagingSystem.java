@@ -155,22 +155,21 @@ public class MessagingSystem {
             if(agentList.contains(targetAgent)) {
                 message = checkBlockedWords(message);
                 if (message.length() < 140) {
-                    //sending message through sendMessage method in Agent
-                    Message m = new Message(sourceAgent, targetAgent, message, System.currentTimeMillis());
-                    sourceAgent.sendMessage(m);
 
-                    //incrementing messagecount for both source and target agent
+                    //incrementing messagecount for source agent
                     sourceAgent.mailbox.messageCount++;
-                    targetAgent.mailbox.messageCount++;
 
                     //checks if mailbox limit has been reached and logs agents out accordingly.
-                    if(checkAgentMailbox(sourceAgent) == 25)
+                    if(checkAgentMailbox(sourceAgent) == 26)
                         returnMessage = sourceAgent.logout();
+                    else {
+                        //sending message through sendMessage method in Agent
+                        Message m = new Message(sourceAgent, targetAgent, message, System.currentTimeMillis());
+                        sourceAgent.sendMessage(m);
 
-                    if(checkAgentMailbox(targetAgent) == 25)
-                        returnMessage = targetAgent.logout();
-                    else
+
                         returnMessage = "Message sent successfully";
+                    }
                 } else {
                     returnMessage = "Message length exceeded";
                 }

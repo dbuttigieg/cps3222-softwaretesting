@@ -2,9 +2,9 @@ package com.cps3222.AutomatedTests.PageObjects;
 
 import org.openqa.selenium.WebDriver;
 
-public class RequestLoginPage extends Page{
+public class LoginErrorPage extends Page{
 
-    public RequestLoginPage(WebDriver browser){
+    public LoginErrorPage(WebDriver browser){
         super(browser);
     }
 
@@ -19,4 +19,7 @@ public class RequestLoginPage extends Page{
         find("requestLoginButton").click();
     }
 
+    public String obtainErrorMessage(){
+        return find("errorMessage").getText();
+    }
 }
