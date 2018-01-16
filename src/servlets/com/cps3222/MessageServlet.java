@@ -46,6 +46,11 @@ public class MessageServlet extends HttpServlet {
                 }
             }
 
+            if (messageResponse.equals("Message sent successfully. Mailbox full. Logging out")){
+                rd = request.getRequestDispatcher("/index.jsp");
+                rd.forward(request, response);
+            }
+
             request.setAttribute("id", request.getParameter("id"));
             rd = request.getRequestDispatcher("/messageresponse.jsp");
             rd.forward(request, response);

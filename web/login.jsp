@@ -23,7 +23,7 @@
             Login key: <input type="text" name="loginKeyField">
             <br/><br/>
 
-            <input type="submit" value="Login">
+            <input type="submit" value="Login" name="loginButton">
         </form>
     </body>
 </html>
