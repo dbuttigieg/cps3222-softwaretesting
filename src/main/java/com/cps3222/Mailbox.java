@@ -1,5 +1,6 @@
 package com.cps3222;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -54,6 +55,16 @@ public class Mailbox {
             messageCount++;
         }
         return messageToConsume;
+    }
+
+    // to clear on logout
+    public void clearMailbox(){
+        Iterator<Message> iter = mailboxQueue.iterator();
+
+        while (iter.hasNext()) {
+            iter.next();
+            iter.remove();
+        }
     }
 
     /**

@@ -12,7 +12,7 @@
 </head>
     <body>
 
-    <h3>${messageResponse}</h3>
+    <h3 name="messageResponse">${messageResponse}</h3>
         <form action="RequestLoginServlet" method="GET">
 
             ID: <input type="text" name="idField">

@@ -7,7 +7,7 @@ public class LoginErrorPage extends Page{
     public LoginErrorPage(WebDriver browser){
         super(browser);
     }
-
+/*
     // Populate form to request key
     public void populateKeyForm(String id, String name){
         find("idField").sendKeys(id);
@@ -18,7 +18,7 @@ public class LoginErrorPage extends Page{
     public void submitKeyForm(){
         find("requestLoginButton").click();
     }
-
+*/
     public String obtainErrorMessage(){
         return find("errorMessage").getText();
     }

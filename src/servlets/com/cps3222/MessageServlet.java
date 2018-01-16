@@ -51,14 +51,16 @@ public class MessageServlet extends HttpServlet {
                             messageResponse = Main.ms.sendMessage(sourceAgent, targetAgent, request.getParameter("msgField"));
 
                             request.setAttribute("messageResponse", messageResponse);
+
+                            if (messageResponse.equals("Message sent successfully. Mailbox full. Logging out")){
+
+                                String logout = sourceAgent.logout();
+                                rd = request.getRequestDispatcher("/index.jsp");
+                                rd.forward(request, response);
+                            }
                         }
                     }
                 }
-            }
-
-            if (messageResponse.equals("Message sent successfully. Mailbox full. Logging out")){
-                rd = request.getRequestDispatcher("/index.jsp");
-                rd.forward(request, response);
             }
 
             request.setAttribute("id", request.getParameter("id"));
@@ -66,8 +68,13 @@ public class MessageServlet extends HttpServlet {
             rd.forward(request, response);
         }
         else{
-            rd = request.getRequestDispatcher("/index.jsp");
-            rd.forward(request, response);
+            for(Agent sourceAgent : Main.ms.agentList) {
+                if (sourceAgent.id.equals(request.getParameter("id"))) {
+                    String logout = sourceAgent.logout();
+                    rd = request.getRequestDispatcher("/index.jsp");
+                    rd.forward(request, response);
+                }
+            }
         }
     }
 

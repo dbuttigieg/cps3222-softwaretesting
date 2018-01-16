@@ -18,10 +18,9 @@
 
             <input type="submit" name="consumeMessageButton" value="Get Next Message">
 
-            <p>${noMessages}<br/>
+            <p name="messageText">${noMessages}<br/>
                 ${messageFrom}<br/>
-                ${messageContent}<br/>
-                ${messageTime}<br/></p>
+                ${messageContent}<br/></p>
             <br/><br/>
             <input type="submit" name="returnToSystemButton" value="Back to Messaging System">
         </form>

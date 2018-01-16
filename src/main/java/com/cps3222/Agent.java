@@ -57,6 +57,7 @@ public class Agent {
      */
     public String logout(){
 
+        mailbox.clearMailbox();
         return "Message sent successfully. Mailbox full. Logging out";
     }
 }

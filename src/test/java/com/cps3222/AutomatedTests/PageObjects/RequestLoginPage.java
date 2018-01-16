@@ -19,4 +19,7 @@ public class RequestLoginPage extends Page{
         find("requestLoginButton").click();
     }
 
+    public String getMailboxLimitMessage(){
+        return find("messageResponse").getText();
+    }
 }

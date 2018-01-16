@@ -3,6 +3,7 @@ package com.cps3222.AutomatedTests.stepdefs;
 import com.cps3222.Agent;
 import com.cps3222.AutomatedTests.PageObjects.*;
 import com.cps3222.Supervisor;
+import cucumber.api.PendingException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -26,6 +27,7 @@ public class MessagingAppStepDefs {
     MessagingSystemPage messagingSystemPage;
     LoginErrorPage loginErrorPage;
     MessageResponsePage messageResponsePage;
+    MailboxPage mailboxPage;
 
     @Before
     public void setup() {
@@ -70,8 +72,8 @@ public class MessagingAppStepDefs {
     /**SCENARIO 2**/
 
     @When("^I wait for (\\d+) seconds$")
-    public void iWaitForSeconds(int arg0) throws Exception {
-        Thread.sleep(65000);
+    public void iWaitForSeconds(int time) throws Exception {
+        Thread.sleep(time*1000);
     }
 
     @Then("^I should not be allowed to log in$")
@@ -113,16 +115,16 @@ public class MessagingAppStepDefs {
     }
 
     @When("^I attempt to send (\\d+) messages$")
-    public void iAttemptToSendMessages(int arg0) throws Exception {
-        for(int i = 0; i < 24; i++) {
+    public void iAttemptToSendMessages(int messages) throws Exception {
+        for(int i = 0; i < messages-1; i++) {
             messagingSystemPage = new MessagingSystemPage(browser);
-            messagingSystemPage.sendMessage("message");
+            messagingSystemPage.sendMessage("001", "message");
             messageResponsePage = new MessageResponsePage(browser);
             messageResponsePage.backToSystem();
         }
         //to enable next scenario step
         messagingSystemPage = new MessagingSystemPage(browser);
-        messagingSystemPage.sendMessage("message");
+        messagingSystemPage.sendMessage("001", "message");
         messageResponsePage = new MessageResponsePage(browser);
     }
 
@@ -134,43 +136,93 @@ public class MessagingAppStepDefs {
 
     @When("^I try to send another message$")
     public void iTryToSendAnotherMessage() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        messageResponsePage.backToSystem();
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.sendMessage("001", "message");
     }
 
     @Then("^the system will inform me that I have exceeded my quota$")
     public void theSystemWillInformMeThatIHaveExceededMyQuota() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
-    }
-
-    @And("^I will be logged out$")
-    public void iWillBeLoggedOut() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
-    }
-
-    @When("^I attempt to send the message <message> to another agent$")
-    public void iAttemptToSendTheMessageMessageToAnotherAgent() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
-    }
-
-    @Then("^the other agent should recieve the message <new-message>$")
-    public void theOtherAgentShouldRecieveTheMessageNewMessage() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
-    }
-
-    @When("^I click on \"([^\"]*)\"$")
-    public void iClickOn(String arg0) throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        requestLoginPage = new RequestLoginPage(browser);
+        String mailboxLimitMessage = requestLoginPage.getMailboxLimitMessage();
+        assertEquals("Message sent successfully. Mailbox full. Logging out", mailboxLimitMessage);
     }
 
     @Then("^I should be logged out$")
     public void iShouldBeLoggedOut() throws Exception {
-        // Write code here that turns the phrase above into concrete actions
+        requestLoginPage = new RequestLoginPage(browser);
+        assertEquals("Request Key", requestLoginPage.getPageTitle());
+    }
+
+    /**SCENARIO 4**/
+
+    @When("^I attempt to send the message (.*) to another agent$")
+    public void iAttemptToSendTheMessageMessageToAnotherAgent(String message) throws Throwable {
+        //logging out target agent to clear mailbox from previous scenario
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.logout();
+
+        requestLoginPage = new RequestLoginPage(browser);
+        requestLoginPage.populateKeyForm("001", "denise");
+        requestLoginPage.submitKeyForm();
+
+        loginPage = new LoginPage(browser);
+        String key = loginPage.obtainSupervisorKey();
+        loginPage.populateLoginForm(key);
+        loginPage.submitLoginForm();
+
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.logout();
+
+        //logging in the source agent to send a message
+        requestLoginPage = new RequestLoginPage(browser);
+        requestLoginPage.populateKeyForm("007", "raoul");
+        requestLoginPage.submitKeyForm();
+
+        loginPage = new LoginPage(browser);
+        String key2 = loginPage.obtainSupervisorKey();
+        loginPage.populateLoginForm(key2);
+        loginPage.submitLoginForm();
+
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.sendMessage("001", message);
+        messageResponsePage = new MessageResponsePage(browser);
+        messageResponsePage.backToSystem();
+        messagingSystemPage.logout();
+    }
+
+    @Then("^the other agent should receive the message (.*)$")
+    public void theOtherAgentShouldReceiveTheMessageNewMessage(String message) throws Throwable {
+        //logging in the receiving agent and checking she got the message
+        requestLoginPage = new RequestLoginPage(browser);
+        requestLoginPage.populateKeyForm("001", "denise");
+        requestLoginPage.submitKeyForm();
+
+        loginPage = new LoginPage(browser);
+        String key = loginPage.obtainSupervisorKey();
+        loginPage.populateLoginForm(key);
+        loginPage.submitLoginForm();
+
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.checkMessagesButton();
+
+        mailboxPage = new MailboxPage(browser);
+        mailboxPage.consumeMessageButton();
+        String messageText = mailboxPage.readConsumedMessage();
+        assertEquals("From: raoul\nContent: "+message, messageText);
+    }
+
+    /**SCENARIO 5**/
+
+    @When("^I click on Log out$")
+    public void iClickOnLogOut() throws Throwable {
+        messagingSystemPage = new MessagingSystemPage(browser);
+        messagingSystemPage.logout();
     }
 
     @After
     public void tearDown(){
         browser.quit();
     }
-
 
 }

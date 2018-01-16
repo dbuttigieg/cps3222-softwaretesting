@@ -22,7 +22,7 @@ Feature: Messaging Application Feature
     Then the messages should be successfully sent
     When I try to send another message
     Then the system will inform me that I have exceeded my quota
-    And I will be logged out
+    Then I should be logged out
 
   Scenario Outline: Blocked words
     Given I am a logged in agent
@@ -33,10 +33,10 @@ Feature: Messaging Application Feature
       | message | new-message |
       |  Hello there | Hello there |
       |  Send recipe now | Send now |
-      |  Nuclear recipe is ready | ready |
-      |  GinGer nuclear RECipE |. |
+      |  Nuclear recipe ready | ready |
+      |  GinGer nuclear RECipE. |. |
 
   Scenario: Logging out
     Given I am a logged in agent
-    When I click on "Log out"
+    When I click on Log out
     Then I should be logged out

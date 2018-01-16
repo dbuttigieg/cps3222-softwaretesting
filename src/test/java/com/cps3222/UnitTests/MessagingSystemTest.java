@@ -112,7 +112,7 @@ public class MessagingSystemTest {
     //for the purpose of this test, agent is sending to himself
     @Test
     public void messageHasBlockedWords() throws Exception {
-        String returnMessage = ms.sendMessage(agent, agent, "Hello. Pass the salt.");
+        String returnMessage = ms.sendMessage(agent, agent, "Hello. Pass the recipe.");
 
         assertEquals("Invalid message content", returnMessage);
     }

@@ -167,7 +167,6 @@ public class MessagingSystem {
                         Message m = new Message(sourceAgent, targetAgent, message, System.currentTimeMillis());
                         sourceAgent.sendMessage(m);
 
-
                         returnMessage = "Message sent successfully";
                     }
                 } else {
@@ -223,9 +222,8 @@ public class MessagingSystem {
      * @return true if the message contains no blocked wods
      */
     private String checkBlockedWords(String message) {
-        message = message.toLowerCase();
         for (int i = 0; i < blockedWords.length; i++) {
-            message = message.replace (blockedWords[i], "");
+            message = message.replaceAll ("(?i)"+blockedWords[i], "");
         }
         return message;
     }
