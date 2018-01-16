@@ -24,17 +24,17 @@ Feature: Messaging Application Feature
     Then the system will inform me that I have exceeded my quota
     And I will be logged out
 
-  Scenario: Blocked words
+  Scenario Outline: Blocked words
     Given I am a logged in agent
     When I attempt to send the message <message> to another agent
-    Then the other agent should recieve the message <new-message>
+    Then the other agent should receive the message <new-message>
 
     Examples:
-    |message                  | new-message |
-    |Hello there              | Hello there |
-    |Send recipe now          | Send now    |
-    |Nuclear recipe is ready  | ready       |
-    |GinGer nuclear RECipE    | .           |
+      | message | new-message |
+      |  Hello there | Hello there |
+      |  Send recipe now | Send now |
+      |  Nuclear recipe is ready | ready |
+      |  GinGer nuclear RECipE |. |
 
   Scenario: Logging out
     Given I am a logged in agent
