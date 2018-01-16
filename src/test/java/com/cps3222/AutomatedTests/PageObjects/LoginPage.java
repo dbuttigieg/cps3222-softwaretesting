@@ -18,6 +18,10 @@ public class LoginPage extends Page{
         find("loginButton").click();
     }
 
+    public String obtainSupervisorKey(){
+        return find("yourLoginKey").getAttribute("value");
+    }
+
     /*
     // Method to automatically login the agent
     public void login(){

@@ -26,14 +26,11 @@ public class MessagingAppStepDefs {
     RequestLoginPage requestLoginPage;
     LoginPage loginPage;
     MessagingSystemPage messagingSystemPage;
-    private Supervisor supervisor;
-    private Agent agent;
+
     @Before
     public void setup() {
-        supervisor = mock(Supervisor.class);
-        agent = new Agent();
 
-        System.setProperty("webdriver.chrome.driver", "./chromedriver");
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\Raoul\\Desktop\\UNI\\Year III\\Testing\\Assignment\\cps3222-softwaretesting\\chromedriver.exe");
         browser = new ChromeDriver();
     }
 
@@ -59,9 +56,8 @@ public class MessagingAppStepDefs {
 
     @When("^I log in using that key$")
     public void iLogInUsingThatKey() throws Exception {
-//        loginPage = new LoginPage(browser);
-        when(supervisor.getLoginKey(agent)).thenReturn("ABCDE12345");
-        loginPage.populateLoginForm("ABCDE12345");
+        String key = loginPage.obtainSupervisorKey();
+        loginPage.populateLoginForm(key);
         loginPage.submitLoginForm();
     }
 

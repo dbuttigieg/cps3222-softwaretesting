@@ -12,8 +12,10 @@
 </head>
     <body>
 
-        Your login key is: ${loginkey}
         <form action="LoginServlet" method="GET">
+            Your login key is: <input type="text" name="yourLoginKey" value ="${loginkey}" readonly>
+            <br/><br/>
+
             ID: <input type="text" name="idField" value="${id}" readonly>
             <br/><br/>
 
